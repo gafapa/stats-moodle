@@ -1,0 +1,22 @@
+# Moodle Student Analyzer - Dependencias
+# Instalar con: pip install -r requirements.txt
+
+# HTTP y API
+requests>=2.31.0
+
+# Análisis de datos
+numpy>=1.24.0
+pandas>=2.0.0
+
+# Machine Learning (predicciones)
+scikit-learn>=1.3.0
+
+# Visualización
+matplotlib>=3.7.0
+seaborn>=0.13.0
+
+# Interfaz gráfica moderna
+customtkinter>=5.2.0
+
+# Empaquetado en ejecutable
+pyinstaller>=6.0.0

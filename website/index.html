@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Moodle Student Analyzer</title>
+  <meta
+    name="description"
+    content="Página simple para explicar qué es Moodle Student Analyzer, para qué sirve y cómo usarlo."
+  >
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#contenido">Saltar al contenido</a>
+
+  <header class="site-header">
+    <div class="wrapper">
+      <div class="header-brand">
+        <p class="site-name">Moodle Student Analyzer</p>
+        <p class="site-tag" data-i18n="headerTag">Análisis simple de Moodle</p>
+      </div>
+      <div class="header-actions">
+        <nav aria-label="Navegación principal">
+          <a href="#idea" data-i18n="navIdea">Idea</a>
+          <a href="#uso" data-i18n="navUse">Cómo usarla</a>
+          <a href="#analisis" data-i18n="navAnalysis">Análisis</a>
+          <a href="#resumen" data-i18n="navSummary">Resumen</a>
+        </nav>
+        <label class="language-picker" for="language-select">
+          <select id="language-select">
+            <option value="es">Español</option>
+            <option value="gl">Galego</option>
+            <option value="en">English</option>
+            <option value="fr">Français</option>
+            <option value="de">Deutsch</option>
+            <option value="ca">Català</option>
+            <option value="eu">Euskara</option>
+          </select>
+        </label>
+      </div>
+    </div>
+  </header>
+
+  <main id="contenido" class="wrapper">
+    <section class="hero">
+      <p class="eyebrow" data-i18n="heroEyebrow">Análisis simple de Moodle</p>
+      <h1 data-i18n="heroTitle">Una aplicación para entender mejor lo que pasa en un curso de Moodle.</h1>
+      <p class="lead" data-i18n="heroLead">
+        Lee la información del campus, resume la actividad del alumnado y ayuda a detectar quién necesita seguimiento antes.
+      </p>
+      <div class="hero-actions-row">
+        <a class="button-primary" href="./downloads/MoodleAnalyzer.exe" download data-i18n="downloadButton">Descargar la app</a>
+        <a class="button-secondary" href="#uso" data-i18n="downloadUseLink">Ver cómo usarla</a>
+      </div>
+      <p class="download-note" data-i18n="downloadNote">
+        Descarga directa del ejecutable para Windows, sin instalación.
+      </p>
+    </section>
+
+    <section id="idea" class="card">
+      <h2 data-i18n="ideaTitle">La idea</h2>
+      <p data-i18n="ideaBody1">
+        Moodle guarda mucha información, pero no siempre es fácil verla de forma clara. Esta aplicación junta lo importante en una sola vista.
+      </p>
+      <p data-i18n="ideaBody2">
+        El objetivo es pasar de muchos datos dispersos a una lectura rápida del curso, con señales útiles para seguimiento y toma de decisiones.
+      </p>
+    </section>
+
+    <section class="card">
+      <h2 data-i18n="usefulnessTitle">Para qué sirve</h2>
+      <ul>
+        <li data-i18n="usefulness1">Ver rápidamente el estado general de un curso.</li>
+        <li data-i18n="usefulness2">Detectar alumnado con poca actividad, bajo rendimiento o más riesgo.</li>
+        <li data-i18n="usefulness3">Revisar cada estudiante con más contexto y menos ruido.</li>
+        <li data-i18n="usefulness4">Generar informes para seguimiento docente, coordinación y tutorías.</li>
+      </ul>
+    </section>
+
+    <section id="uso" class="card">
+      <h2 data-i18n="howTitle">Cómo usarla</h2>
+      <ol>
+        <li data-i18n="how1">Abre la aplicación y escribe la URL de tu Moodle.</li>
+        <li data-i18n="how2">Conecta con un token o genéralo con usuario y contraseña si no lo tienes.</li>
+        <li data-i18n="how3">Selecciona el curso, ajusta la nota mínima para aprobar si hace falta y lanza el análisis.</li>
+        <li data-i18n="how4">Consulta el dashboard, las gráficas, el detalle del alumnado y los informes.</li>
+      </ol>
+    </section>
+
+    <section class="card">
+      <h2 data-i18n="insideTitle">Cómo funciona</h2>
+      <ol>
+        <li data-i18n="inside1">Se conecta a los web services de Moodle en modo lectura.</li>
+        <li data-i18n="inside2">Recoge datos de estudiantes, tareas, cuestionarios, foros, actividad y progreso, y omite métricas que no aplican al curso.</li>
+        <li data-i18n="inside3">Calcula métricas, niveles de riesgo y señales de seguimiento usando el umbral de aprobado configurado.</li>
+        <li data-i18n="inside4">Presenta el resultado en paneles, gráficas e informes fáciles de interpretar.</li>
+      </ol>
+    </section>
+
+    <section id="analisis" class="card">
+      <h2 data-i18n="analysisTitle">Análisis, gráficas e informes</h2>
+      <ul>
+        <li data-i18n="analysis1">Análisis general del curso con alumnado total, engagement medio, entregas, actividad reciente y distribución de riesgo adaptada a lo que realmente tiene el curso.</li>
+        <li data-i18n="analysis2">Análisis por estudiante con riesgo, engagement, progreso, entregas, uso de cuestionarios, participación en foros y tendencia de notas, usando la nota mínima configurada como referencia.</li>
+        <li data-i18n="analysis3">Gráficas de distribución, comparación y correlación para entender de un vistazo el comportamiento del grupo.</li>
+        <li data-i18n="analysis4">Visualizaciones para detectar alumnado con mayor riesgo, menor actividad o menor seguimiento, sin sobredimensionar avisos leves cuando la nota está claramente por encima del aprobado.</li>
+        <li data-i18n="analysis5">Informes por curso, por tarea y por estudiante para revisar casos concretos con un resumen útil y ajustado a las métricas disponibles.</li>
+        <li data-i18n="analysis6">Si alguien necesita otro tipo de análisis o informe, puede solicitarlo para adaptarlo a una necesidad real.</li>
+      </ul>
+    </section>
+
+    <section class="summary" id="resumen">
+      <h2 data-i18n="summaryTitle">En una frase</h2>
+      <p data-i18n="summaryBody">
+        Moodle Student Analyzer sirve para convertir los datos de Moodle en una vista clara de lo que ocurre en un curso y ayudar a decidir dónde actuar primero.
+      </p>
+    </section>
+  </main>
+
+  <script src="./app.js"></script>
+</body>
+</html>

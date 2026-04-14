@@ -1,0 +1,63 @@
+name: Build Mac Apple Silicon
+
+on:
+  workflow_dispatch:   # se lanza manualmente desde GitHub
+
+jobs:
+  build-mac-arm64:
+    runs-on: macos-latest   # runner Apple Silicon (M-series)
+
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v4
+
+      - name: Configurar Python 3.11 (arm64)
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          architecture: arm64
+
+      - name: Verificar arquitectura
+        run: |
+          python3 -c "import platform; print('Python arch:', platform.machine())"
+          uname -m
+
+      - name: Instalar dependencias
+        run: |
+          python3 -m pip install --upgrade pip
+          python3 -m pip install -r requirements.txt
+          python3 -m pip install "pyinstaller>=6.0.0"
+
+      - name: Compilar ejecutable
+        run: |
+          python3 -m PyInstaller \
+            --onefile \
+            --windowed \
+            --name MoodleAnalyzer \
+            --target-arch arm64 \
+            --hidden-import sklearn.ensemble._gb \
+            --hidden-import sklearn.ensemble._forest \
+            --hidden-import sklearn.linear_model._ridge \
+            --hidden-import sklearn.utils._cython_blas \
+            --hidden-import sklearn.neighbors.typedefs \
+            --hidden-import sklearn.neighbors._partition_nodes \
+            --hidden-import sklearn.tree._utils \
+            --hidden-import matplotlib.backends.backend_tkagg \
+            --hidden-import matplotlib.backends._backend_tk \
+            --hidden-import matplotlib.backends.backend_macosx \
+            --collect-submodules sklearn \
+            --collect-submodules matplotlib \
+            --collect-submodules customtkinter \
+            main.py
+
+      - name: Verificar binario generado
+        run: |
+          file dist/MoodleAnalyzer
+          lipo -info dist/MoodleAnalyzer 2>/dev/null || true
+
+      - name: Subir artefacto
+        uses: actions/upload-artifact@v4
+        with:
+          name: MoodleAnalyzer-mac-arm64
+          path: dist/MoodleAnalyzer
+          retention-days: 30
