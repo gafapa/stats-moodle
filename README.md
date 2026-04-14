@@ -2,118 +2,110 @@
 
 Desktop application for analyzing Moodle course activity, student engagement, grade trends, and follow-up risk.
 
-## Requirements
+## Download
 
-- Python 3.11+
-- Dependencies from `requirements.txt`
-- Access to a Moodle site with REST web services enabled
+Pre-built executables are available from [GitHub Actions](https://github.com/gafapa/stats-moodle/actions):
 
-## Run
+| Platform | How to get it |
+|---|---|
+| **Windows** | Run `build.bat` or download from the web server bundle |
+| **Mac (Apple Silicon M1/M2/M3/M4)** | Trigger the **"Build Mac Apple Silicon"** workflow in Actions, then download the artifact |
+
+> **Mac note:** After downloading, remove the Gatekeeper quarantine flag before running:
+> ```bash
+> xattr -cr MoodleAnalyzer
+> ./MoodleAnalyzer
+> ```
+
+## Run from source
 
 ```bash
 pip install -r requirements.txt
 python main.py
 ```
 
-At startup, the app asks for the UI language on the first screen. That language stays fixed for the session.
+Requirements: Python 3.11+ and access to a Moodle site with REST web services enabled.
 
-## Standalone Build
+At startup the app asks for the UI language on the first screen. That language stays fixed for the session.
 
-Windows:
+## Build
 
+**Windows:**
 ```bat
 build.bat
 ```
 
-Linux/macOS:
-
+**Mac (Apple Silicon — must run on the Mac itself):**
 ```bash
-./build.sh
+chmod +x build_mac.sh
+./build_mac.sh
 ```
+
+**Via GitHub Actions (Mac, from any OS):**
+1. Go to [Actions → Build Mac Apple Silicon](https://github.com/gafapa/stats-moodle/actions/workflows/build_mac.yml)
+2. Click **Run workflow**
+3. Download the `MoodleAnalyzer-mac-arm64` artifact when the job finishes
 
 The generated artifact is standalone and does not require Python or a separate dependency installation on the target machine.
 
-## Project Website
+## Credentials and privacy
 
-Open `website/index.html` in a browser to view a simple static page that explains the idea of the project and how to use it.
-The website includes client-side internationalization for Spanish, Galician, English, French, German, Catalan, and Basque.
-The website also exposes a direct download link for the standalone Windows executable at `./downloads/MoodleAnalyzer.exe`.
-Its copy also explains that analysis uses a configurable passing threshold and hides metrics that do not apply to the selected course.
+Saved profiles are stored **locally** on each user's machine at `~/.moodle_analyzer/profiles.json`. They are never uploaded anywhere.
 
-## Web Server Bundle
-
-To prepare a folder that is ready to upload to a web server:
-
-```bat
-prepare_web_release.bat
-```
-
-The script copies the website assets into `deploy/webserver/`, places the standalone executable in `deploy/webserver/downloads/MoodleAnalyzer.exe`, and runs `build.bat` automatically if the executable is missing.
-
-## Connection Options
-
-The application supports two authentication paths:
-
-1. Direct token authentication with an existing Moodle web service token.
-2. Automatic token generation through `login/token.php` using Moodle `username` and `password` with the `moodle_mobile_app` service for Mobile web services.
-
-Passwords are only used in memory to request the token. They are not persisted in saved profiles.
-The `Generate token` action and its explanation are only shown when the token field is empty.
-If token generation fails, the application shows an explicit error dialog with the Moodle error message.
-
-## Saved Profiles
-
-Saved profiles store:
-
+Profiles store:
 - Profile name
 - Moodle base URL
-- Token, when available
-- Username, when provided
+- Token (when available)
+- Username (when provided)
 
-Saved profiles do not store passwords.
+**Passwords are never persisted.** They are only kept in memory to request a token and are discarded immediately after.
+
+## Connection
+
+Two authentication paths are supported:
+
+1. **Direct token** — paste an existing Moodle web service token.
+2. **Auto-generate token** — enter username and password; the app calls `login/token.php` with the `moodle_mobile_app` service and stores only the resulting token.
+
+The "Generate token" option is only shown when the token field is empty. If generation fails, an explicit error dialog shows the Moodle error message.
 
 ## Internationalization
 
-The desktop app persists the selected UI language locally and supports:
+The desktop app supports:
 
-- Spanish
-- Galician
-- English
-- French
-- German
-- Catalan
-- Basque
+- Spanish · Galician · English · French · German · Catalan · Basque
 
-UI copy for the desktop app is centralized in `src/i18n.py`, and website copy is centralized in `website/app.js`.
-Both were normalized to clean UTF-8 text so labels, hints, and status messages render without mojibake.
-The desktop app now asks for the UI language on the initial connection screen and does not expose a language switcher after that first step.
-The desktop runtime translation layer also handles icon-prefixed labels and dynamic status messages.
+The UI language is chosen on the connection screen and stays fixed for the session. Desktop copy is centralized in `src/i18n.py`; website copy in `website/app.js`.
 
-## Analysis Scope
+## Analysis scope
 
-The analyzer adapts its metrics to the course components that actually exist.
+Metrics adapt to what actually exists in each course:
 
-- If a course has no forums, forum participation is excluded from student and course-level analysis instead of being treated as zero participation.
-- The same rule applies to assignments, quizzes, and completion-driven metrics when those components are not present in the course.
-- Dashboards and detail views hide unsupported analysis sections instead of showing misleading empty metrics.
+- Forums, assignments, quizzes, and completion metrics are excluded from analysis (not zeroed) when those components are not present.
+- Dashboards and detail views hide unsupported sections instead of showing misleading empty metrics.
 
-## Passing Threshold And Risk
+## Passing threshold and risk
 
-- The passing grade threshold is configurable on the course selection screen before analysis starts.
-- The default threshold is `50%`.
-- The selected threshold is reused by grade-risk analysis, fail-risk estimation, chart reference lines, dashboard color cues, student detail indicators, and AI report context.
-- Risk classification is conservative for high-performing students: mild signals by themselves should not move a student with clearly safe grades into medium risk.
-- Risk interpretation is threshold-relative, so a course configured with a different pass mark is analyzed against that mark instead of a hardcoded `50%`.
+- Configurable on the course selection screen (default: `50%`).
+- Applies to grade-risk analysis, fail-risk estimation, chart reference lines, dashboard color cues, student detail indicators, and AI report context.
+- Risk classification is conservative for high-performing students.
 
 ## Outputs
 
-The application can produce:
+- Course dashboards — overview KPIs, risk distribution, recent activity, adaptive metrics.
+- Student views — engagement, predicted grade, risk level, assignment/quiz history, timeline charts.
+- Charts — distribution, comparison, correlation, percentile, risk-oriented.
+- AI-assisted reports — for courses, assignments, and individual students (uses active language and configured threshold as context).
+- Static project website + deployable web-server bundle (`prepare_web_release.bat`).
 
-- Course dashboards with overview KPIs, risk distribution, recent activity, and adaptive metrics based on available Moodle components.
-- Student-level views with engagement, predicted grade, risk level, assignment and quiz history, and timeline charts.
-- Charts for distribution, comparison, correlation, percentile, and risk-oriented visual inspection.
-- AI-assisted reports for courses, assignments, and individual students, using the active UI language and configured passing threshold as context.
-- A static project website plus a deployable web-server bundle prepared with `prepare_web_release.bat`.
+## Project website
+
+Open `website/index.html` in a browser for a static overview page with client-side i18n (Spanish, Galician, English, French, German, Catalan, Basque) and a direct download link for the Windows executable.
+
+To prepare a deployable web-server folder:
+```bat
+prepare_web_release.bat
+```
 
 ## Tests
 
