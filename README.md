@@ -30,23 +30,47 @@ At startup the app asks for the UI language on the first screen. That language s
 
 ## Build
 
-**Windows:**
+### Windows → `dist\MoodleAnalyzer.exe`
+
+Requisitos: Python 3.11+ instalado y en el PATH.
+
 ```bat
 build.bat
 ```
 
-**Mac (Apple Silicon — must run on the Mac itself):**
+El script instala las dependencias, limpia artefactos previos y genera `dist\MoodleAnalyzer.exe` con PyInstaller. El `.exe` es autocontenido — no requiere Python ni instalación adicional en la máquina destino.
+
+---
+
+### Mac Apple Silicon (M1/M2/M3/M4) → `dist/MoodleAnalyzer`
+
+**Opción A — Build local** (ejecutar en el propio Mac):
+
+Requisitos: Python 3.11+ nativo arm64. Verificar antes de compilar:
+```bash
+python3 -c "import platform; print(platform.machine())"
+# Debe mostrar: arm64
+```
+
 ```bash
 chmod +x build_mac.sh
 ./build_mac.sh
 ```
 
-**Via GitHub Actions (Mac, from any OS):**
-1. Go to [Actions → Build Mac Apple Silicon](https://github.com/gafapa/stats-moodle/actions/workflows/build_mac.yml)
-2. Click **Run workflow**
-3. Download the `MoodleAnalyzer-mac-arm64` artifact when the job finishes
+El ejecutable queda en `dist/MoodleAnalyzer`. La primera vez que se abre en el Mac:
+```bash
+xattr -cr dist/MoodleAnalyzer   # quitar bloqueo de Gatekeeper
+./dist/MoodleAnalyzer
+```
 
-The generated artifact is standalone and does not require Python or a separate dependency installation on the target machine.
+**Opción B — GitHub Actions** (desde cualquier sistema operativo):
+
+1. Ir a [Actions → Build Mac Apple Silicon](https://github.com/gafapa/stats-moodle/actions/workflows/build_mac.yml)
+2. Click en **Run workflow** → **Run workflow**
+3. Esperar ~5-10 minutos
+4. Descargar el artefacto `MoodleAnalyzer-mac-arm64` de la página del job
+
+> PyInstaller no puede compilar de forma cruzada: el ejecutable de Windows debe generarse en Windows y el de Mac en macOS.
 
 ## Credentials and privacy
 
